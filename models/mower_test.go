@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMowerMove(t *testing.T) {
@@ -65,7 +66,7 @@ func TestMowerMove(t *testing.T) {
 				Orientation: tt.orientation,
 				Position:    tt.initPos,
 			}
-			tt.field.savePosition(tt.initPos)
+			tt.field.MowerPositions[tt.initPos] = true
 			err := mower.execInstruction(tt.instruction, tt.field)
 			assert.NoError(t, err)
 			assert.Equal(t, mower.Position, tt.wantPos)
@@ -132,7 +133,7 @@ func TestMowerMoveMaxPos(t *testing.T) {
 				Orientation: tt.orientation,
 				Position:    tt.initPos,
 			}
-			tt.field.savePosition(tt.initPos)
+			tt.field.MowerPositions[tt.initPos] = true
 			err := mower.execInstruction(tt.instruction, tt.field)
 			assert.NoError(t, err)
 			assert.Equal(t, mower.Position, tt.initPos)
@@ -149,7 +150,7 @@ func TestMowerResolve(t *testing.T) {
 		instructions []Instruction
 		orientation  Orientation
 		initPos      Position
-		endString string
+		endString    string
 	}{
 		{
 			name: "test move example 1",
@@ -159,9 +160,9 @@ func TestMowerResolve(t *testing.T) {
 			},
 			instructions: []Instruction{Left, Forward, Left, Forward, Left,
 				Forward, Left, Forward, Forward},
-			orientation:  North,
-			initPos:      Position{1, 2},
-			endString: "1 3 N",
+			orientation: North,
+			initPos:     Position{1, 2},
+			endString:   "1 3 N",
 		},
 		{
 			name: "test move example 2",
@@ -171,19 +172,19 @@ func TestMowerResolve(t *testing.T) {
 			},
 			instructions: []Instruction{Forward, Forward, Right, Forward,
 				Forward, Right, Forward, Right, Right, Forward},
-			orientation:  East,
-			initPos:      Position{3, 3},
-			endString: "5 1 E",
+			orientation: East,
+			initPos:     Position{3, 3},
+			endString:   "5 1 E",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mower := &Mower{
-				Orientation: tt.orientation,
-				Position:    tt.initPos,
+				Orientation:  tt.orientation,
+				Position:     tt.initPos,
 				Instructions: tt.instructions,
 			}
-			tt.field.savePosition(tt.initPos)
+			tt.field.MowerPositions[tt.initPos] = true
 			err := mower.Resolve(tt.field)
 			assert.NoError(t, err)
 			assert.Equal(t, tt.endString, mower.ToString())

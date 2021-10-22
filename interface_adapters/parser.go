@@ -3,10 +3,11 @@ package interface_adapters
 import (
 	"bufio"
 	"errors"
-	"github.com/Baumanar/test_it/models"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/Baumanar/test_it/models"
 )
 
 // Parses a file and returns a field and the list of mowers
@@ -18,8 +19,6 @@ var InstructionsNotFoundErr = errors.New("no instructions found")
 var InvalidFieldSizeErr = errors.New("file should include field size in first line")
 var NotInFieldErr = errors.New("a mower is not in the field")
 var EmptyFileErr = errors.New("empty file")
-var InvalidInstructionErr = errors.New("invalid instruction")
-var InvalidOrientationErr = errors.New("invalid orientation")
 var InvalidPositionErr = errors.New("invalid position")
 
 func (f FileParser) Parse(fileName string) (*models.Field, []*models.Mower, error) {
@@ -101,9 +100,10 @@ func (FileParser) getMowerProgram(scanner *bufio.Scanner) (*models.Mower, error)
 		return nil, InvalidPositionErr
 	}
 	if !models.Orientation(sizeTxt[2]).IsValid() {
-		return nil, InvalidOrientationErr
+		return nil, models.InvalidOrientationErr
 	}
 	orientation := models.Orientation(sizeTxt[2])
+	// Scan next line which is mower's instructions
 	if !scanner.Scan() {
 		return nil, InstructionsNotFoundErr
 	}
@@ -111,7 +111,7 @@ func (FileParser) getMowerProgram(scanner *bufio.Scanner) (*models.Mower, error)
 	instructions := make([]models.Instruction, len(instructionsTxt))
 	for idx, char := range instructionsTxt {
 		if !models.Instruction(char).IsValid() {
-			return nil, InvalidInstructionErr
+			return nil, models.InvalidInstructionErr
 		}
 		instructions[idx] = models.Instruction(char)
 	}

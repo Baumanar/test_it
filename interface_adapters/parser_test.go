@@ -1,9 +1,10 @@
 package interface_adapters
 
 import (
+	"testing"
+
 	"github.com/Baumanar/test_it/models"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func Test_fileParser_Parse(t *testing.T) {
@@ -93,7 +94,7 @@ func Test_fileParser_Parse(t *testing.T) {
 			wantField:   nil,
 			wantMowers:  nil,
 			wantLengths: nil,
-			wantErr:     InvalidOrientationErr,
+			wantErr:     models.InvalidOrientationErr,
 		},
 		{
 			name:        "empty file",

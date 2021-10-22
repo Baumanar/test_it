@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
 	"sync"
 )
 
@@ -28,12 +27,6 @@ func (m *Mower) checkAndUpdatePosition(oldPos, newPos Position, field *Field) {
 	m.Position = newPos
 }
 
-func (f *Field) savePosition(position Position) {
-	f.Lock()
-	f.MowerPositions[position] = true
-	f.Unlock()
-}
-
 // A Mower has an orientation, a position and the list of
 // instructions if will follow
 type Mower struct {
@@ -43,7 +36,7 @@ type Mower struct {
 }
 
 // Execute all instructions
-func (m *Mower) Resolve(field *Field) (error) {
+func (m *Mower) Resolve(field *Field) error {
 	for _, inst := range m.Instructions {
 		err := m.execInstruction(inst, field)
 		if err != nil {
@@ -54,14 +47,14 @@ func (m *Mower) Resolve(field *Field) (error) {
 }
 
 // Save mower's position in the field
-func (m *Mower) Init(field *Field) () {
-	field.savePosition(m.Position)
+func (m *Mower) Init(field *Field) {
+	field.MowerPositions[m.Position] = true
 }
 
 // Execute one instruction
 func (m *Mower) execInstruction(instruction Instruction, field *Field) error {
 	if !instruction.IsValid() {
-		return errors.New("Invalid instruction")
+		return InvalidInstructionErr
 	}
 	if instruction == Left || instruction == Right {
 		m.rotate(instruction)
@@ -79,7 +72,6 @@ func (m *Mower) ToString() string {
 // Update the mower position
 // Before updating it, check
 func (m *Mower) moveForward(field *Field) {
-
 
 	var newPos Position
 	switch m.Orientation {

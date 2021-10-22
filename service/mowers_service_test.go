@@ -1,10 +1,11 @@
 package service
 
 import (
+	"testing"
+
 	"github.com/Baumanar/test_it/interface_adapters"
 	"github.com/Baumanar/test_it/models"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestMowersRunnerRun(t *testing.T) {
@@ -15,8 +16,8 @@ func TestMowersRunnerRun(t *testing.T) {
 		endString string
 	}{
 		{
-			name:     "test ok",
-			filename: "../fixtures/example.txt",
+			name:      "test ok",
+			filename:  "../fixtures/example.txt",
 			endString: "1 3 N\n5 1 E\n",
 		},
 	}

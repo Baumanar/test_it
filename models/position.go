@@ -1,16 +1,18 @@
 package models
 
-
+import "errors"
 
 type Instruction string
 type Orientation string
 
+var InvalidInstructionErr = errors.New("invalid instruction")
+var InvalidOrientationErr = errors.New("invalid orientation")
 
 const (
-	North   Orientation = "N"
-	West    Orientation = "W"
-	South   Orientation = "S"
-	East    Orientation = "E"
+	North Orientation = "N"
+	West  Orientation = "W"
+	South Orientation = "S"
+	East  Orientation = "E"
 
 	Forward Instruction = "F"
 	Left    Instruction = "L"
@@ -32,7 +34,6 @@ func (o Orientation) IsValid() bool {
 	}
 	return false
 }
-
 
 type Position struct {
 	X int
@@ -59,8 +60,6 @@ func NewPosition(x, y int) *Position {
 		Y: y,
 	}
 }
-
-
 
 var rotationsLeft = map[Orientation]Orientation{
 	North: West,

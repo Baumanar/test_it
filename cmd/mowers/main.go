@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/Baumanar/test_it/service"
 	"os"
+
+	"github.com/Baumanar/test_it/service"
 )
 
 func main() {

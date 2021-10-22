@@ -2,12 +2,12 @@ package service
 
 import (
 	"fmt"
-	"github.com/Baumanar/test_it/interface_adapters"
-	"github.com/Baumanar/test_it/models"
 	"strings"
 	"sync"
-)
 
+	"github.com/Baumanar/test_it/interface_adapters"
+	"github.com/Baumanar/test_it/models"
+)
 
 // check benchmarks: discuss on shared map
 
